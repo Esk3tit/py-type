@@ -8,4 +8,4 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-CMD [ "python", "./py-type.py" ]
+ENTRYPOINT [ "bash" ]
