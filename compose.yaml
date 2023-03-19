@@ -1,0 +1,9 @@
+services:
+  app:
+    image: kaipanofficial/py-type
+    volumes:
+      - user-data:/usr/src/app
+    pull_policy: always
+
+volumes:
+  user-data:
