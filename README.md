@@ -14,7 +14,7 @@ Otherwise users will need to install `windows-curses` if they are on Windows. Us
 ### Docker Instructions
 1. **OPTIONAL** Clone this repo somewhere
 2. **OPTIONAL** build the image with `docker build .` (if building/running command in same directory as the Dockerfile)
-3. Run `docker run -it --rm kaipanofficial/py-type` to pull the latest image and run it with Docker.
+3. Run `docker compose run app` to pull the latest image and run it with Docker.
 4. In the docker bash shell session, run `python py-type.py` (I haven't found a way to start the bash shell and then run this command in one go yet, so this is the workaround for now).
 
 ### Windows/Mac/Linux
