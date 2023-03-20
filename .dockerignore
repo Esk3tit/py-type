@@ -4,3 +4,4 @@ venv3.10/
 .gitignore
 README.md
 test.py
+user.dat
