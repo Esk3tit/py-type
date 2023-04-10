@@ -81,7 +81,7 @@ def get_keys_to_practice(stdscr):
         stdscr.refresh()
         key = stdscr.getkey()
 
-        if ord(key) == 27:
+        if key == "\x1b" or (len(key) == 1 and ord(key) == 27):
             break
         elif key in keys_set or key not in string.printable:
             continue
@@ -183,14 +183,11 @@ def wpm_test(stdscr, user):
         except:
             continue
 
-        try:
-            if ord(key) == 27:
-                stdscr.nodelay(False)
-                exit(0)
-        except:
-            pass
+        if key == "\x1b" or (len(key) == 1 and ord(key) == 27):
+            stdscr.nodelay(False)
+            exit(0)
 
-        if key in ("KEY_BACKSPACE", "\b", "\x7f", 263):
+        if key in ("KEY_BACKSPACE", "\b", "\x7f"):
             if len(current_text) > 0:
                 current_text.pop()
                 cursor_idx -= 1
@@ -222,7 +219,7 @@ def main(stdscr):
         stdscr.addstr(6, 0, "Great Work! Press any key to continue... (ESC to exit)")
         key = stdscr.getkey()
 
-        if ord(key) == 27:
+        if key == "\x1b" or (len(key) == 1 and ord(key) == 27):
             break
 
     save_user(stdscr, user)
