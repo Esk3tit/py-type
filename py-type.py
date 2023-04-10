@@ -14,6 +14,12 @@ PROMPT_LENGTH = {
     "3": 300
 }
 
+SPECIAL_CHARS = {
+    ord(' '): '\u2423',
+    ord('\n'): '\u21b5',
+    ord('\r'): '\u21b5'
+}
+
 
 def start_screen(stdscr):
     # Clear screen
@@ -31,14 +37,15 @@ def display_text(stdscr, target, current, mistakes, wpm=0):
     # Add special unicode symbol representations for spaces and new lines
     for char in target:
         target_char = char
-        if char == ' ':
-            target_char = '\u2423'
+        if ord(char) in SPECIAL_CHARS:
+            target_char = SPECIAL_CHARS[ord(char)]
 
         stdscr.addstr(target_char)
 
     stdscr.addstr(f"\nWPM: {wpm}")
 
     for i, char in enumerate(current):
+        char_to_scr = char
         correct_char = target[i]
         color = curses.color_pair(3)
         if char == correct_char and correct_char == ' ':
@@ -49,8 +56,9 @@ def display_text(stdscr, target, current, mistakes, wpm=0):
             color = curses.color_pair(1)
         else:
             color = curses.color_pair(2)
+            char_to_scr = correct_char
 
-        stdscr.addstr(0, i, char, color)
+        stdscr.addstr(0, i, char_to_scr, color)
 
 
 def display_stats(stdscr, user):
@@ -69,7 +77,7 @@ def get_keys_to_practice(stdscr):
         stdscr.erase()
         stdscr.addstr("Enter the letters you want in the typing prompt (no delimiters, ex. 'abCde./,')\n")
         stdscr.addstr("Enter ESC to stop entering keys\n")
-        stdscr.addstr(f"Current keys: {' '.join([key for key in allowed_keys])}")
+        stdscr.addstr(f"Current keys: {' '.join([key if ord(key) not in SPECIAL_CHARS else SPECIAL_CHARS[ord(key)] for key in allowed_keys])}")
         stdscr.refresh()
         key = stdscr.getkey()
 
@@ -85,7 +93,6 @@ def get_keys_to_practice(stdscr):
 
 
 def get_length(stdscr):
-
     while True:
         stdscr.erase()
         stdscr.addstr("Select the length of the text prompt by entering the number in parentheses\n")
@@ -136,6 +143,10 @@ def calculate_accuracy(mistakes, prompt_length):
 
 def wpm_test(stdscr, user):
     allowed_keys = get_keys_to_practice(stdscr)
+
+    if not allowed_keys:
+        exit(0)
+
     prompt_length = get_length(stdscr)
     target_text = load_text(allowed_keys, prompt_length)
     current_text = []
