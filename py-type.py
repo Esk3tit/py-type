@@ -183,10 +183,14 @@ def wpm_test(stdscr, user):
         except:
             continue
 
-        if ord(key) == 27:
-            stdscr.nodelay(False)
-            exit(0)
-        if key in ("KEY_BACKSPACE", "\b", "\x7f"):
+        try:
+            if ord(key) == 27:
+                stdscr.nodelay(False)
+                exit(0)
+        except:
+            pass
+
+        if key in ("KEY_BACKSPACE", "\b", "\x7f", 263):
             if len(current_text) > 0:
                 current_text.pop()
                 cursor_idx -= 1
